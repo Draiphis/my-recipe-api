@@ -25,4 +25,6 @@ jobs:
         run: ./mvnw test
 
       - name: Package application
-        run: ./mvnw clean package
+        run: |
+          chmod +x mvnw
+          ./mvnw clean package
