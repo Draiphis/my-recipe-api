@@ -21,7 +21,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-          ports:
+        ports:
           - 5432:5432
 
     steps:
@@ -36,8 +36,8 @@ jobs:
           java-version: 17
           cache: maven
 
-#      - name: Run tests
-#        run: ./mvnw test
+      - name: Run tests
+        run: ./mvnw test
 
       - name: Package application
         run: |
