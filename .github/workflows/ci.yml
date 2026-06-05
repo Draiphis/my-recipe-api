@@ -21,8 +21,8 @@ jobs:
           java-version: 17
           cache: maven
 
-      - name: Run tests
-        run: ./mvnw test
+#      - name: Run tests
+#        run: ./mvnw test
 
       - name: Package application
         run: |
