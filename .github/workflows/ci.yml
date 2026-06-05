@@ -40,6 +40,11 @@ jobs:
         run: |
           chmod +x mvnw 
           ./mvnw test
+        env:
+          DB_USER: ${{secrets.DB_USERNAME}}
+          DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+          DB_URL: ${{secrets.DB_URL}}
+          SPRING_PROFILES_ACTIVE: ${{secrets.SPRING_PROFILES_ACTIVE}}
 
       - name: Package application
         run: |
