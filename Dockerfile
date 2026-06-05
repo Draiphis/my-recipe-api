@@ -2,10 +2,10 @@ FROM maven:3.9-eclipse-temurin-17 AS build
 
 WORKDIR /workspace
 
-COPY ./my_recipe_api/pom.xml .
+COPY pom.xml .
 RUN mvn dependency:go-offline
 
-COPY ./my_recipe_api/src ./src
+COPY src ./src
 RUN mvn clean package -DskipTests
 
 
