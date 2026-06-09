@@ -36,6 +36,14 @@ jobs:
           java-version: 17
           cache: maven
 
+      - name: Wait for PostgreSQL
+        run: |
+          for i in {1..30}; do
+            pg_isready -h localhost -p 5432 && break
+            echo "Waiting for postgres..."
+            sleep 2
+          done
+
       - name: Run tests
         run: |
           chmod +x mvnw 
