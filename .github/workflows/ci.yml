@@ -23,6 +23,11 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
+      adminer:
+        image: adminer
+        restart: always
+        ports:
+          - "8080:8080"
 
     steps:
       - name: Checkout code
@@ -107,8 +112,11 @@ jobs:
           username: ${{secrets.SERVER_USER}}
           key: ${{secrets.SERVER_SSH_KEY}}
           script: |
-            docker login -u ${{secrets.DOCKHUB_USERNAME}} -p ${{secrets.DOCKERHUB_TOKEN}}
+            docker login -u ${{secrets.DOCKERHUB_USERNAME}} -p ${{secrets.DOCKERHUB_TOKEN}}
             docker pull ${{secrets.DOCKERHUB_USERNAME}}/myrecipe-api:${{github.sha}}
             docker stop myrecipe-api || true
             docker rm myrecipe-api || true
             docker compose up -d
+        
+      
+        
