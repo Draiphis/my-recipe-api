@@ -54,6 +54,7 @@ jobs:
           DB_URL: jdbc:postgresql://localhost:5432/db
           SPRING_PROFILES_ACTIVE: ${{secrets.SPRING_PROFILES_ACTIVE}}
 
+
       - name: Package application
         run: |
           chmod +x mvnw
