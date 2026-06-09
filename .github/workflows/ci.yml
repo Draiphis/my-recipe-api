@@ -51,7 +51,7 @@ jobs:
         env:
           DB_USERNAME: ${{secrets.DB_USERNAME}}
           DB_PASSWORD: ${{secrets.DB_PASSWORD}}
-          DB_URL: ${{secrets.DB_URL}}
+          DB_URL: jdbc:postgresql://localhost:5432/db
           SPRING_PROFILES_ACTIVE: ${{secrets.SPRING_PROFILES_ACTIVE}}
 
       - name: Package application
