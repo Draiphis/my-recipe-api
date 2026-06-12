@@ -97,6 +97,7 @@ jobs:
 
   deploy:
     runs-on: self-hosted
+    needs: docker-push
 
     steps:
       - name: Configure SSH key
