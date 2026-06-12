@@ -8,7 +8,7 @@ on :
 
 jobs:
   build-test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     services:
       postgres:
         image: postgres:16
@@ -66,7 +66,7 @@ jobs:
           path: target/*.jar
 
   docker-build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-test
 
     steps:
@@ -76,7 +76,7 @@ jobs:
       - name: Build Docker image
         run: docker build -t myrecipe-api:${{github.sha}} .
   docker-push:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-test
 
     steps:
@@ -96,7 +96,7 @@ jobs:
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/myrecipe-api:${{ github.sha }}
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: docker-push
 
     steps:
