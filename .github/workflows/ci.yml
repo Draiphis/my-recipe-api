@@ -97,21 +97,22 @@ jobs:
 
   deploy:
     runs-on: self-hosted
-    needs: docker-push
 
     steps:
-      - name: Deploy on server
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{secrets.SERVER_HOST}}
-          username: ${{secrets.SERVER_USER}}
-          key: ${{secrets.SERVER_SSH_KEY}}
-          script: |
-            docker login -u ${{secrets.DOCKERHUB_USERNAME}} -p ${{secrets.DOCKERHUB_TOKEN}}
-            docker pull ${{secrets.DOCKERHUB_USERNAME}}/myrecipe-api:${{github.sha}}
-            docker stop myrecipe-api || true
-            docker rm myrecipe-api || true
-            docker compose up -d
+      - name: Configure SSH key
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force "$env:USERPROFILE\.ssh"
+          Set-Content "$env:USERPROFILE\.ssh\id_rsa" '${{ secrets.SERVER_SSH_KEY }}'
+          icacls "$env:USERPROFILE\.ssh\id_rsa" /inheritance:r
+          icacls "$env:USERPROFILE\.ssh\id_rsa" /grant:r "$env:USERNAME:F"
+
+      - name: Deploy
+        shell: powershell
+        run: |
+          ssh -o StrictHostKeyChecking=no `
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} `
+            "docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} && docker pull ${{ secrets.DOCKERHUB_USERNAME }}/myrecipe-api:${{ github.sha }} && docker stop myrecipe-api || true && docker rm myrecipe-api || true && docker compose up -d"
         
       
         
