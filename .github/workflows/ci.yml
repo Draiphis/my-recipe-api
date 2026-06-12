@@ -112,7 +112,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           privateKey: ${{ secrets.SERVER_SSH_KEY }}
 
-
       - name: Deploy on server
         uses: garygrossgarten/github-action-ssh@release
         with:
