@@ -100,20 +100,18 @@ jobs:
     needs: docker-push
 
     steps:
-      - name: Configure SSH key
-        shell: powershell
-        run: |
-          New-Item -ItemType Directory -Force "$env:USERPROFILE\.ssh"
-          Set-Content "$env:USERPROFILE\.ssh\id_rsa" '${{ secrets.SERVER_SSH_KEY }}'
-          icacls "$env:USERPROFILE\.ssh\id_rsa" /inheritance:r
-          icacls "$env:USERPROFILE\.ssh\id_rsa" /grant:r "$env:USERNAME:F"
+      - name: Deploy on server
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: |
+            cat ${{secrets.DOCKERHUB_TOKEN}} | docker login --username ${{secrets.DOCKERHUB_USERNAME}}
+            --password-stdin docker pull ${{secrets.DOCKERHUB_USERNAME}}/myrecipe-api:${{github.sha}}
+            docker stop myrecipe-api || true
+            docker rm myrecipe-api || true
+            docker compose up -d
+          host: ${{secrets.SERVER_HOST}}
+          username: ${{secrets.SERVER_USER}}
+          privateKey: ${{secrets.SERVER_SSH_KEY}}
 
-      - name: Deploy
-        shell: powershell
-        run: |
-          ssh -o StrictHostKeyChecking=no `
-            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} `
-            "docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} && docker pull ${{ secrets.DOCKERHUB_USERNAME }}/myrecipe-api:${{ github.sha }} && docker stop myrecipe-api || true && docker rm myrecipe-api || true && docker compose up -d"
-        
       
         
