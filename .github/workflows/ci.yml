@@ -104,7 +104,7 @@ jobs:
         uses: garygrossgarten/github-action-ssh@release
         with:
           command: |
-            cat ${{secrets.DOCKERHUB_TOKEN}} | docker login --username ${{secrets.DOCKERHUB_USERNAME}}
+            echo ${{secrets.DOCKERHUB_TOKEN}} | docker login --username ${{secrets.DOCKERHUB_USERNAME}}
             --password-stdin docker pull ${{secrets.DOCKERHUB_USERNAME}}/myrecipe-api:${{github.sha}}
             docker stop myrecipe-api || true
             docker rm myrecipe-api || true
